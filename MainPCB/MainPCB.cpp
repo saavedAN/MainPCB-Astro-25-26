@@ -16,21 +16,6 @@
 #define BNO055_SYS_TRIGGER_ADDR 0x3F
 #define BNO055_ID               0xA0
 
-// Output Regs
-#define ACC_DATA_X_LSB             0x08
-#define ACC_DATA_X_MSB             0x09
-// #define ACC_DATA_Y_MSB          0x0B
-// #define ACC_DATA_Z_MSB          0x0D
-// #define MAG_DATA_X_MSB          0x0F
-// #define MAG_DATA_Y_MSB          0x11
-// #define MAG_DATA_Z_MSB          0x13
-// #define GYR_DATA_X_MSB          0x15
-// #define GYR_DATA_Y_MSB          0x17
-// #define GYR_DATA_Z_MSB          0x19
-// #define
-// #define
-// #define
-
 // Modes
 #define OP_MODE_CONFIG          0x00
 #define OP_MODE_NDOF            0x0C // The both imu and accel
@@ -106,7 +91,7 @@ bool configureIMU() {
 uint16_t[12] readSensorData() {
     uint8_t data[24];
 
-    i2c_read_blocking(I2C_PORT, data, ACC_DATA_X_LSB, 24, true);
+    i2c_read_blocking(I2C_PORT, data, 0x08, 24, true);  // 0x08 is start of sensor data ACC_X_LSB
 
     // each sensor data is 16 bit, accel is first , mag 2nd, gyro 3rd, ori 4th. stored in imus below
     uint16_t imus[12];
