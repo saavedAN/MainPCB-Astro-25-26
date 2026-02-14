@@ -16,10 +16,27 @@
 #define BNO055_SYS_TRIGGER_ADDR 0x3F
 #define BNO055_ID               0xA0
 
+// Output Regs
+#define ACC_DATA_X_LSB             0x08
+#define ACC_DATA_X_MSB             0x09
+// #define ACC_DATA_Y_MSB          0x0B
+// #define ACC_DATA_Z_MSB          0x0D
+// #define MAG_DATA_X_MSB          0x0F
+// #define MAG_DATA_Y_MSB          0x11
+// #define MAG_DATA_Z_MSB          0x13
+// #define GYR_DATA_X_MSB          0x15
+// #define GYR_DATA_Y_MSB          0x17
+// #define GYR_DATA_Z_MSB          0x19
+// #define
+// #define
+// #define
+
 // Modes
 #define OP_MODE_CONFIG          0x00
 #define OP_MODE_NDOF            0x0C // The both imu and accel
 #define PWR_MODE_NORMAL         0x00
+
+
 
 // --- Your Helpers ---
 void writeToIMU(uint8_t reg, uint8_t data) {
@@ -86,6 +103,21 @@ bool configureIMU() {
     return true; // we good
 }
 
+uint16_t[12] readSensorData() {
+    uint8_t data[24];
+
+    i2c_read_blocking(I2C_PORT, data, ACC_DATA_X_LSB, 24, true);
+
+    // each sensor data is 16 bit, accel is first , mag 2nd, gyro 3rd, ori 4th. stored in imus below
+    uint16_t imus[12];
+
+    for(int i = 0; i < imus.length(); i++) {
+        imus[i] = (int16_t)(data[2*i+1] << 8 | data[2*i]);
+    }
+    
+    return imus;
+}
+
 int main()
 {
     stdio_init_all();
@@ -109,9 +141,12 @@ int main()
     }
 
     printf("IMU Ready.\n");
+    uint16_t imus[12] = readSensorData();  // godspeed little 
 
-    while(true) {
-        // do your sensor stuff
-        sleep_ms(100);
-    }
+    //printing out the data from imus
+    std::cout << "Acceleration X Y Z: " << imus[0] << " "  << imus[1] << " " << imus[2] << " \n";
+    std::cout << "Magnytometer X Y Z: " << imus[3] << " " << imus[4] << " " << imus[5] << " \n";
+    std::cout << "Gyroscope: X Y Z: " << imus[6] << " " << imus[7] << " " << imus[8] << " \n";
+    std::cout << "Orientation: X Y Z: " << imus[9] << " " << imus[10] << " " << imus[11] << " \n";
+
 }
