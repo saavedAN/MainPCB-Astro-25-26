@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
+#include <stdint.h>
 
 // I2C defines
 #define I2C_PORT i2c0
@@ -20,6 +21,8 @@
 #define OP_MODE_CONFIG          0x00
 #define OP_MODE_NDOF            0x0C // The both imu and accel
 #define PWR_MODE_NORMAL         0x00
+
+
 
 // --- Your Helpers ---
 void writeToIMU(uint8_t reg, uint8_t data) {
@@ -101,6 +104,7 @@ int main()
     gpio_pull_up(I2C_SCL);
 
     printf("Booting IMU...\n");
+    sleep_ms(1000);
     if (!configureIMU()) {
         while(1) {
             printf("IMU Failed. Stuck loop.\n");
@@ -113,5 +117,6 @@ int main()
     while(true) {
         // do your sensor stuff
         sleep_ms(100);
+
     }
 }
