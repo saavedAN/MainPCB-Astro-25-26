@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include <stdint.h>
+#include <iostream>
 
 // I2C defines
 #define I2C_PORT i2c0
