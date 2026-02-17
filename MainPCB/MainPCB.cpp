@@ -90,19 +90,20 @@ bool configureIMU() {
     return true; // we good
 }
 
-uint16_t[12] readSensorData() {
+typedef struct {
+    uint16_t imusData[12];
+}SensorData;
+
+void readSensorData(SensorData* imu) {
     uint8_t data[24];
 
-    i2c_read_blocking(I2C_PORT, data, 0x08, 24, true);  // 0x08 is start of sensor data ACC_X_LSB
+    i2c_read_blocking(I2C_PORT, 0x08, data, 24, true);  // 0x08 is start of sensor data ACC_X_LSB
 
     // each sensor data is 16 bit, accel is first , mag 2nd, gyro 3rd, ori 4th. stored in imus below
-    uint16_t imus[12];
 
-    for(int i = 0; i < imus.length(); i++) {
-        imus[i] = (int16_t)(data[2*i+1] << 8 | data[2*i]);
+    for(int i = 0; i < 12; i++) {
+        imu->imusData[i] = (int16_t)(data[2*i+1] << 8 | data[2*i]);
     }
-    
-    return imus;
 }
 
 int main()
@@ -135,12 +136,13 @@ int main()
         sleep_ms(100);
 
     }
-    uint16_t imus[12] = readSensorData();  // godspeed little 
+    SensorData imu;
+    readSensorData(&imu);  // godspeed little 
 
     //printing out the data from imus
-    std::cout << "Acceleration X Y Z: " << imus[0] << " "  << imus[1] << " " << imus[2] << " \n";
-    std::cout << "Magnytometer X Y Z: " << imus[3] << " " << imus[4] << " " << imus[5] << " \n";
-    std::cout << "Gyroscope: X Y Z: " << imus[6] << " " << imus[7] << " " << imus[8] << " \n";
-    std::cout << "Orientation: X Y Z: " << imus[9] << " " << imus[10] << " " << imus[11] << " \n";
+    std::cout << "Acceleration X Y Z: " << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
+    std::cout << "Magnytometer X Y Z: " << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
+    std::cout << "Gyroscope: X Y Z: " << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
+    std::cout << "Orientation: X Y Z: " << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
 
 }
