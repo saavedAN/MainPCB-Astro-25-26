@@ -6,8 +6,8 @@
 
 // I2C defines
 #define I2C_PORT i2c0
-#define I2C_SDA 8
-#define I2C_SCL 9
+#define I2C_SDA 1
+#define I2C_SCL 2
 #define I2C_ADDR 0x28
 
 // Registers (gotta have these)
@@ -141,8 +141,13 @@ int main()
 
     //printing out the data from imus
     std::cout << "Acceleration X Y Z: " << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
+    sleep_ms(100);
     std::cout << "Magnytometer X Y Z: " << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
+    sleep_ms(100);
     std::cout << "Gyroscope: X Y Z: " << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
+    sleep_ms(100);
     std::cout << "Orientation: X Y Z: " << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
+    sleep_ms(100);
+
 
 }
