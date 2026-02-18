@@ -131,11 +131,7 @@ int main()
 
     printf("IMU Ready.\n");
 
-    while(true) {
-        // do your sensor stuff
-        sleep_ms(100);
 
-    }
     SensorData imu;
     readSensorData(&imu);  // godspeed little 
 
