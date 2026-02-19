@@ -4,7 +4,7 @@
 		"generator" : 
 		{
 			"multiConfig" : false,
-			"name" : "MinGW Makefiles"
+			"name" : "NMake Makefiles"
 		},
 		"paths" : 
 		{
@@ -18,8 +18,8 @@
 			"isDirty" : false,
 			"major" : 4,
 			"minor" : 2,
-			"patch" : 1,
-			"string" : "4.2.1",
+			"patch" : 2,
+			"string" : "4.2.2",
 			"suffix" : ""
 		}
 	},

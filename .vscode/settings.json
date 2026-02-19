@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/Users/camrhys/Documents/VT/Astro/Main/MainPCB-Astro-25-26/MainPCB"
+    "cmake.sourceDirectory": "C:/Users/DELL/OneDrive/Desktop/Visual Studio files/MainPCB-Astro-25-26/MainPCB",
+    "C_Cpp.default.compilerPath": "C:/msys64/mingw64/bin/gcc.exe"
 }

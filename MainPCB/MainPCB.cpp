@@ -1,61 +1,70 @@
-#include <stdio.h>
-#include "pico/stdlib.h"
-#include "hardware/i2c.h"
-#include <stdint.h>
-#include <iostream>
 
-// I2C defines
-#define I2C_PORT i2c0
-#define I2C_SDA 1
-#define I2C_SCL 2
-#define I2C_ADDR 0x28
-
-// Registers (gotta have these)
-#define BNO055_CHIP_ID_ADDR     0x00
-#define BNO055_PAGE_ID_ADDR     0x07
-#define BNO055_PWR_MODE_ADDR    0x3E
-#define BNO055_OPR_MODE_ADDR    0x3D
-#define BNO055_SYS_TRIGGER_ADDR 0x3F
-#define BNO055_ID               0xA0
-
-// Modes
-#define OP_MODE_CONFIG          0x00
-#define OP_MODE_NDOF            0x0C // The both imu and accel
-#define PWR_MODE_NORMAL         0x00
-
+#include "MainPCB.h"
 
 
 // --- Your Helpers ---
-void writeToIMU(uint8_t reg, uint8_t data) {
+int writeToIMU(uint8_t reg, uint8_t data) {
     uint8_t buf[2] = {reg, data};
-    i2c_write_blocking(I2C_PORT, I2C_ADDR, buf, 2, false);
+    int status = i2c_write_blocking(I2C_PORT, I2C_ADDR, buf, 2, false);
+    if(status < 0){
+        return BNO55_WRITE_ERROR;
+    }
+    return status;
 }
 
-void read(uint8_t reg, uint8_t* buffer, size_t length) {
-    i2c_write_blocking(I2C_PORT, I2C_ADDR, &reg, 1, true);
-    i2c_read_blocking(I2C_PORT, I2C_ADDR, buffer, length, false);
-}
+
+// void read(uint8_t reg, uint8_t* buffer, size_t length) {
+//     i2c_write_blocking(I2C_PORT, I2C_ADDR, &reg, 1, true);
+//     i2c_read_blocking(I2C_PORT, I2C_ADDR, buffer, length, false);
+// }
 
 // quick wrapper to read just one byte cause we do it a lot
-uint8_t read8(uint8_t reg) {
-    uint8_t val;
-    read(reg, &val, 1);
-    return val;
+// uint8_t read8(uint8_t reg) {
+//     uint8_t val;
+//     read(reg, &val, 1);
+//     return val;
+// }
+int readFromIMU(uint8_t reg, uint8_t *buffer, size_t len){
+    int status = i2c_write_blocking(I2C_PORT,I2C_ADDR, &reg, 1, true);
+    if(status < 0){
+        return -1;
+    }
+    status = i2c_read_blocking(I2C_PORT, I2C_ADDR, buffer,len, false);
+    if(status < 0){
+        return -2;
+    }
+    return 0;
 }
+
+
+
+
 
 // --- The Meat ---
 
 bool configureIMU() {
-    // 1. Check if the chip is even awake
-    uint8_t id = read8(BNO055_CHIP_ID_ADDR);
-    if (id != BNO055_ID) {
-        sleep_ms(1000); // hold on, maybe it's booting
-        id = read8(BNO055_CHIP_ID_ADDR);
-        if (id != BNO055_ID) {
-            printf("BNO055 dead or missing. ID: 0x%02X\n", id);
-            return false; // bail
-        }
+
+    uint8_t buffer;
+    int status = readFromIMU(BNO055_CHIP_ID_ADDR, &buffer, 1);
+    if(status < 0){
+        printf("readFromIMU() has an error");
+        return false;
     }
+    sleep_ms(1000);
+    if(buffer != BNO055_ID){
+        printf("BNO055 dead or missing. ID: 0x%02X\n", buffer);
+        return false;
+    }
+    // 1. Check if the chip is even awake
+    // uint8_t id = readFromIMU(BNO055_CHIP_ID_ADDR,1);
+    // if (id != BNO055_ID) {
+    //     sleep_ms(1000); // hold on, maybe it's booting
+    //     id = readFromIMU(BNO055_CHIP_ID_ADDR,1);
+    //     if (id != BNO055_ID) {
+    //         printf("BNO055 dead or missing. ID: 0x%02X\n", id);
+    //         return false; // bail
+    //     }
+    // }
 
     // 2. Switch to config mode so we can reset
     writeToIMU(BNO055_OPR_MODE_ADDR, OP_MODE_CONFIG);
@@ -65,11 +74,13 @@ bool configureIMU() {
     writeToIMU(BNO055_SYS_TRIGGER_ADDR, 0x20); // 0x20 = reset bit
     sleep_ms(30);
 
+
     // 4. Wait for it to come back to life
-    while (read8(BNO055_CHIP_ID_ADDR) != BNO055_ID) {
-        sleep_ms(10);
-    }
-    sleep_ms(50); // extra safety buffer
+    // while (readFromIMU(BNO055_CHIP_ID_ADDR,1) != BNO055_ID) {
+    //     sleep_ms(10);
+    //     printf("71");
+    // }
+    // sleep_ms(50); // extra safety buffer
 
     // 5. Set normal power mode
     writeToIMU(BNO055_PWR_MODE_ADDR, PWR_MODE_NORMAL);
@@ -90,14 +101,12 @@ bool configureIMU() {
     return true; // we good
 }
 
-typedef struct {
-    uint16_t imusData[12];
-}SensorData;
-
 void readSensorData(SensorData* imu) {
     uint8_t data[24];
 
-    i2c_read_blocking(I2C_PORT, 0x08, data, 24, true);  // 0x08 is start of sensor data ACC_X_LSB
+    uint8_t ACC_LSB = 0x08;
+    i2c_write_blocking(I2C_PORT, I2C_ADDR, &ACC_LSB, 1, true);
+    i2c_read_blocking(I2C_PORT, ACC_LSB, data, 24, false);  // 0x08 is start of sensor data ACC_X_LSB
 
     // each sensor data is 16 bit, accel is first , mag 2nd, gyro 3rd, ori 4th. stored in imus below
 
@@ -123,7 +132,7 @@ int main()
     printf("Booting IMU...\n");
     sleep_ms(1000);
     if (!configureIMU()) {
-        while(1) {
+        while(true) {
             printf("IMU Failed. Stuck loop.\n");
             sleep_ms(1000);
         }
@@ -133,17 +142,14 @@ int main()
 
 
     SensorData imu;
-    readSensorData(&imu);  // godspeed little 
 
     //printing out the data from imus
-    std::cout << "Acceleration X Y Z: " << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
-    sleep_ms(100);
-    std::cout << "Magnytometer X Y Z: " << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
-    sleep_ms(100);
-    std::cout << "Gyroscope: X Y Z: " << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
-    sleep_ms(100);
-    std::cout << "Orientation: X Y Z: " << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
-    sleep_ms(100);
-
-
+    while(1) {
+        readSensorData(&imu);  // godspeed little 
+        std::cout << "Acceleration X Y Z: " << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
+        std::cout << "Magnytometer X Y Z: " << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
+        std::cout << "Gyroscope: X Y Z: " << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
+        std::cout << "Orientation: X Y Z: " << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
+        sleep_ms(500);
+    }
 }

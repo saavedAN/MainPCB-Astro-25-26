@@ -1,0 +1,50 @@
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "cmake/preload/toolchains/util/find_compiler.cmake:12 (find_program)"
+      - "cmake/preload/toolchains/util/find_compiler.cmake:39 (pico_find_compiler)"
+      - "cmake/preload/toolchains/util/pico_arm_gcc_common.cmake:25 (pico_find_compiler_with_triples)"
+      - "cmake/preload/toolchains/pico_arm_cortex_m0plus_gcc.cmake:7 (include)"
+      - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineSystem.cmake:146 (include)"
+      - "CMakeLists.txt:10 (project)"
+    mode: "program"
+    variable: "PICO_COMPILER_CC"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "arm-none-eabi-gcc"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\msys64\\ucrt64\\bin"
+        - "C:\\msys64\\usr\\bin"
+        - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common"
+        - "C:\\Windows\\system32"
+        - "C:/Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:/Program Files/dotnet/"
+        - "C:\\Program Files\\Mullvad VPN\\resources"
+        - "C:/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/"
+        - "C:\\Program Files\\MATLAB\\R2025a\\bin"
+        - "C:/msys64/mingw64/bin"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:/Program Files/Git/cmd"
+        - "C:\\Users\\DELL\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:/Users/DELL/AppData/Local/Programs/Microsoft VS Code/bin"
+        - "C:\\Users\\DELL\\.pico-sdk\\ninja\\v1.12.1"
+        - "C:/intelFPGA_lite/24.1std/questa_fse/win64"
+...
