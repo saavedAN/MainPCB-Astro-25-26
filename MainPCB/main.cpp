@@ -1,4 +1,7 @@
 #include "MainPCB.h"
+#include <string>
+#include <iostream>
+#include "pico/stdlib.h"
 
 int main()
 {
@@ -16,8 +19,8 @@ int main()
 
     printf("Booting IMU...\n");
     sleep_ms(1000);
-    if (!configureIMU()) {
-        while(true) {
+    if(!configureIMU()) {
+        while(true){
             printf("IMU Failed. Stuck loop.\n");
             sleep_ms(1000);
         }
@@ -27,14 +30,20 @@ int main()
 
 
     SensorData imu;
-
     //printing out the data from imus
-    while(1) {
+    while(readSensorData(&imu) >=  0) {
         readSensorData(&imu);  // godspeed little 
-        std::cout << "Acceleration X Y Z: " << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
-        std::cout << "Magnytometer X Y Z: " << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
-        std::cout << "Gyroscope: X Y Z: " << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
-        std::cout << "Orientation: X Y Z: " << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
+        std::cout << "Acceleration X Y Z: " 
+        << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
+        std::cout << "Magnytometer X Y Z: " 
+        << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
+        std::cout << "Gyroscope: X Y Z: " 
+        << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
+        std::cout << "Orientation: X Y Z: " 
+        << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
+
         sleep_ms(500);
     }
+    printf("",readSensorData(&imu));
+    return 0;
 }

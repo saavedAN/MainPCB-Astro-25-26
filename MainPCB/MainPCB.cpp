@@ -1,6 +1,6 @@
 
 #include "MainPCB.h"
-
+#include <iostream>
 
 // --- Your Helpers ---
 int writeToIMU(uint8_t reg, uint8_t data) {
@@ -97,17 +97,23 @@ bool configureIMU() {
     return true; // we good
 }
 
-void readSensorData(SensorData* imu) {
+int readSensorData(SensorData* imu) {
     uint8_t data[24];
 
     uint8_t ACC_LSB = 0x08;
-    i2c_write_blocking(I2C_PORT, I2C_ADDR, &ACC_LSB, 1, true);
-    i2c_read_blocking(I2C_PORT, ACC_LSB, data, 24, false);  // 0x08 is start of sensor data ACC_X_LSB
+    int status = i2c_write_blocking(I2C_PORT, I2C_ADDR, &ACC_LSB, 1, true);
+    if(status < 0){
+        return -3;
+    }
+    status = i2c_read_blocking(I2C_PORT, ACC_LSB, data, 24, false);  // 0x08 is start of sensor data ACC_X_LSB
+    if(status < 0){
+        return -4;
+    }    
 
     // each sensor data is 16 bit, accel is first , mag 2nd, gyro 3rd, ori 4th. stored in imus below
-
     for(int i = 0; i < 12; i++) {
         imu->imusData[i] = (int16_t)(data[2*i+1] << 8 | data[2*i]);
     }
+    return 0;
 }
 

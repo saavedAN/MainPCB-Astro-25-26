@@ -2,7 +2,6 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include <stdint.h>
-#include <iostream>
 
 // I2C defines
 #define I2C_PORT i2c0
@@ -29,7 +28,7 @@ typedef struct {
     uint16_t imusData[12];
 }SensorData;
 
-void readSensorData(SensorData* imu);
+int readSensorData(SensorData* imu);
 int writeToIMU(uint8_t reg, uint8_t data);
 int readFromIMU(uint8_t reg, uint8_t *buffer, size_t len);
 bool configureIMU();
