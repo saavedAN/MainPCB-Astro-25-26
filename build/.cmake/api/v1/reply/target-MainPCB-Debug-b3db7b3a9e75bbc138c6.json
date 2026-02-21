@@ -17,8 +17,8 @@
 			"target_link_libraries",
 			"pico_define_boot_stage2",
 			"add_custom_command",
-			"pico_add_uf2_output",
 			"pico_add_dis_output",
+			"pico_add_uf2_output",
 			"target_compile_definitions",
 			"pico_set_program_name",
 			"pico_set_program_version",
@@ -92,18 +92,6 @@
 			{
 				"command" : 7,
 				"file" : 2,
-				"line" : 111,
-				"parent" : 2
-			},
-			{
-				"command" : 6,
-				"file" : 4,
-				"line" : 616,
-				"parent" : 10
-			},
-			{
-				"command" : 8,
-				"file" : 2,
 				"line" : 76,
 				"parent" : 2
 			},
@@ -111,6 +99,18 @@
 				"command" : 6,
 				"file" : 2,
 				"line" : 60,
+				"parent" : 10
+			},
+			{
+				"command" : 8,
+				"file" : 2,
+				"line" : 111,
+				"parent" : 2
+			},
+			{
+				"command" : 6,
+				"file" : 4,
+				"line" : 616,
 				"parent" : 12
 			},
 			{
@@ -2871,11 +2871,11 @@
 	[
 		{
 			"backtrace" : 11,
-			"id" : "picotool::@6890427a1f51a3e7e1df"
+			"id" : "MainPCB::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 13,
-			"id" : "MainPCB::@6890427a1f51a3e7e1df"
+			"id" : "picotool::@6890427a1f51a3e7e1df"
 		}
 	],
 	"paths" : 

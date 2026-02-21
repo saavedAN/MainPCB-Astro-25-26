@@ -177,8 +177,8 @@ Discarded input sections
  .text._Z12configureIMUv
                 0x00000000       0x94 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
  .text._Z14readSensorDataP10SensorData
-                0x00000000       0x68 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
- .debug_info    0x00000000     0x2652 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
+                0x00000000       0x64 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
+ .debug_info    0x00000000     0x2658 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
  .debug_abbrev  0x00000000      0x540 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
  .debug_loclists
                 0x00000000      0x173 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
@@ -186,7 +186,7 @@ Discarded input sections
                 0x00000000       0x38 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
  .debug_rnglists
                 0x00000000       0x26 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
- .debug_line    0x00000000      0x775 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
+ .debug_line    0x00000000      0x77d CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
  .debug_str     0x00000000     0x12af CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
  .comment       0x00000000       0x46 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj
  .debug_frame   0x00000000       0x78 CMakeFiles/MainPCB.dir/MainPCB.cpp.obj

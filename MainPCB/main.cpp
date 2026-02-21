@@ -9,10 +9,12 @@
 int main()
 {
     stdio_init_all();
-    sleep_ms(2000); // give the serial monitor a sec to catch up
+
+ 
+    sleep_ms(10000); // give the serial monitor a sec to catch up
 
     // I2C Initialisation. Using it at 400Khz.
-    i2c_init(I2C_PORT, 400*1000);
+    i2c_init(I2C_PORT, 400*10000);
     
     // Gotta actually set the pins to I2C mode or nothing happens
     gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
@@ -24,7 +26,7 @@ int main()
     sleep_ms(1000);
     if(!configureIMU()) {
         while(true){
-            printf("IMU Failed. Stuck loop.\n");
+            printf(" IMU Failed. Stuck loop.\n");
             sleep_ms(1000);
         }
     }

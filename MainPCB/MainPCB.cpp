@@ -9,6 +9,7 @@
 
 // --- Your Helpers ---
 int writeToIMU(uint8_t reg, uint8_t data) {
+    printf("Writing!!!");
     uint8_t buf[2] = {reg, data};
     int status = i2c_write_blocking(I2C_PORT, I2C_ADDR, buf, 2, false);
     if(status < 0){
@@ -18,14 +19,28 @@ int writeToIMU(uint8_t reg, uint8_t data) {
 }
 
 int readFromIMU(uint8_t reg, uint8_t *buffer, size_t len){
-    int status = i2c_write_blocking(I2C_PORT,I2C_ADDR, &reg, 1, true);
+    printf("Reading!!!");
+
+    // for (uint8_t addr = 0x08; addr <= 0x77; addr++) {
+    //     // Try writing zero bytes to see if device ACKs
+    //     int ret = i2c_write_timeout_us(I2C_PORT, addr, NULL, 0, false, 5000);
+    //     if (ret >= 0) {
+    //         printf("Found device at 0x%02X\n", addr);
+    //     }
+    //     sleep_ms(10);
+    // }
+
+    int status = i2c_write_timeout_us(I2C_PORT,I2C_ADDR, &reg, 1, true,10000);  // PROBLEM LINE
     if(status < 0){
+        printf("Help me %d", status);
         return I2C_WRITE_ERROR;
     }
+    printf("27");
     status = i2c_read_blocking(I2C_PORT, I2C_ADDR, buffer,len, false);
     if(status < 0){
         return I2C_READ_ERROR;
     }
+    printf("32");
     return 0;
 }
 
@@ -34,9 +49,10 @@ bool configureIMU() {
     uint8_t buffer;
     int status = readFromIMU(BNO055_CHIP_ID_ADDR, &buffer, 1);
     if(status < 0){
-        printf("readFromIMU() has an error");
+        printf(" readFromIMU() has an error");
         return false;
     }
+    printf("42");
     sleep_ms(1000);
     if(buffer != BNO055_ID){
         printf("BNO055 dead or missing. ID: 0x%02X\n", buffer);
@@ -67,6 +83,7 @@ bool configureIMU() {
     writeToIMU(BNO055_OPR_MODE_ADDR, OP_MODE_NDOF);
     sleep_ms(20);
 
+    printf("Yippeee!!!");
     return true; // we good
 }
 
