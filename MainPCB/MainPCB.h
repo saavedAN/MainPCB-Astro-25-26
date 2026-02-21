@@ -1,7 +1,9 @@
 #include <stdio.h>
-#include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include <stdint.h>
+#include <iostream>
+#include <string>
+#include "pico/stdlib.h"
 
 // I2C defines
 #define I2C_PORT i2c0
@@ -16,9 +18,10 @@
 #define BNO055_OPR_MODE_ADDR    0x3D
 #define BNO055_SYS_TRIGGER_ADDR 0x3F
 #define BNO055_ID               0xA0
-
 #define BNO55_WRITE_ERROR -1
 
+#define I2C_WRITE_ERROR -2;
+#define I2C_READ_ERROR -3;
 // Modes
 #define OP_MODE_CONFIG          0x00
 #define OP_MODE_NDOF            0x0C // The both imu and accel

@@ -1,7 +1,10 @@
 #include "MainPCB.h"
-#include <string>
-#include <iostream>
 #include "pico/stdlib.h"
+#include <stdint.h>
+#include <iostream>
+#include <string>
+#include "hardware/i2c.h"
+#include <stdio.h>
 
 int main()
 {
@@ -32,7 +35,6 @@ int main()
     SensorData imu;
     //printing out the data from imus
     while(readSensorData(&imu) >=  0) {
-        readSensorData(&imu);  // godspeed little 
         std::cout << "Acceleration X Y Z: " 
         << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
         std::cout << "Magnytometer X Y Z: " 
