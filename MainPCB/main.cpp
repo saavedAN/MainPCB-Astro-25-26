@@ -6,10 +6,6 @@
 #include "hardware/i2c.h"
 #include <stdio.h>
 
-typedef struct {
-    uint16_t imusData[12];
-}SensorData;
-
 
 int main()
 {

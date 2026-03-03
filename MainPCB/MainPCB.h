@@ -29,6 +29,9 @@
 #define OP_MODE_NDOF            0x0C // The both imu and accel
 #define PWR_MODE_NORMAL         0x00
 
+typedef struct {
+    uint16_t imusData[12];
+}SensorData;
 
 
 
