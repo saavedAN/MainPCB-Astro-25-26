@@ -39,13 +39,10 @@ int main()
     while(readSensorData(&imu) ==  0) {
         std::cout << "Acceleration X Y Z: " 
         << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
-        sleep_ms(100);
         std::cout << "Magnytometer X Y Z: " 
         << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
-        sleep_ms(100);
         std::cout << "Gyroscope: X Y Z: " 
         << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
-
         std::cout << "Orientation: X Y Z: " 
         << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
 

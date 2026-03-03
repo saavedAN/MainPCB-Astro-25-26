@@ -9,13 +9,10 @@
 
 // --- The Meat ---
 bool configureIMU() {
+    uint8_t reg = BNO055_CHIP_ID_ADDR;
     uint8_t buffer;
     sleep_ms(1000);
-    int status = i2c_write_blocking(I2C_PORT,I2C_ADDR,(uint8_t[]){BNO055_CHIP_ID_ADDR},1,true);
-    if(status < 0){
-        printf(" i2c_write has an error ");
-        return false;
-    }
+    int status = i2c_write_blocking(I2C_PORT,I2C_ADDR,&reg,1,true);
     status = i2c_read_blocking(I2C_PORT,I2C_ADDR,&buffer,1,false);
     if(buffer != BNO055_ID){
         printf("BNO055 dead or missing. ID: 0x%02X\n", buffer);
@@ -27,15 +24,13 @@ bool configureIMU() {
     sleep_ms(20);
 
     //reset all status bits
-    i2c_write_blocking(I2C_PORT, I2C_ADDR, (uint8_t[]){BNO055_SYS_TRIGGER_ADDR,0x00}, 2, false);
+    i2c_write_blocking(I2C_PORT, I2C_ADDR, (uint8_t[]){BNO055_SYS_TRIGGER_ADDR,0x20}, 2, false);
     sleep_ms(5);
 
     // Configure Power Mode
     i2c_write_blocking(I2C_PORT, I2C_ADDR, 
         (uint8_t[]){BNO055_PWR_MODE_ADDR,PWR_MODE_NORMAL}, 2, false);
     sleep_ms(5);
-
-
 
     //initializing internal oscillator
     //good for higher fusion accuracy
@@ -45,15 +40,10 @@ bool configureIMU() {
     i2c_write_blocking(I2C_PORT, I2C_ADDR, data, 2, false);
     sleep_ms(5);
 
-    // Defaul Axis Configuration
-    data[0] = 0x41;
-    data[1] = 0x24;
-    i2c_write_blocking(I2C_PORT, I2C_ADDR, data, 2, false);
-    sleep_ms(5);
 
     // Set units to m/s^2
     data[0] = 0x3B;
-    data[1] = 0b0001000;
+    data[1] = 0b00001000;
     i2c_write_blocking(I2C_PORT, I2C_ADDR, data, 2, false);
     sleep_ms(5);
 
