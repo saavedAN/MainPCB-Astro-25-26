@@ -99,15 +99,6 @@ PICO_SDK_FETCH_FROM_GIT_TAG:FILEPATH=
 //Path to the Raspberry Pi Pico SDK
 PICO_SDK_PATH:PATH=C:/Users/DELL/.pico-sdk/sdk/2.2.0
 
-//Value Computed by CMake
-Project_BINARY_DIR:STATIC=C:/Users/DELL/OneDrive/Desktop/Visual Studio files/MainPCB-Astro-25-26/build
-
-//Value Computed by CMake
-Project_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-Project_SOURCE_DIR:STATIC=C:/Users/DELL/OneDrive/Desktop/Visual Studio files/MainPCB-Astro-25-26/MainPCB
-
 
 ########################
 # INTERNAL cache entries

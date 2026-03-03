@@ -36,7 +36,7 @@ pico_sdk_init()
 # Add executable. Default name is the project name, version 0.1
 
 add_executable(MainPCB MainPCB.cpp
-                main.cpp )
+                main.cpp)
 
 pico_set_program_name(MainPCB "MainPCB")
 pico_set_program_version(MainPCB "0.1")

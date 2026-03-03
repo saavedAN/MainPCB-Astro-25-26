@@ -15,7 +15,6 @@ int main()
 {
     stdio_init_all();
 
- 
     sleep_ms(10000); // give the serial monitor a sec to catch up
 
     // I2C Initialisation. Using it at 400Khz.
