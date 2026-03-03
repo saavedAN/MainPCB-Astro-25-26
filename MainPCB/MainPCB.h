@@ -7,8 +7,8 @@
 
 // I2C defines
 #define I2C_PORT i2c0
-#define I2C_SDA 1
-#define I2C_SCL 2
+#define I2C_SDA 4
+#define I2C_SCL 5
 #define I2C_ADDR 0x28
 
 // Registers (gotta have these)
@@ -20,16 +20,17 @@
 #define BNO055_ID               0xA0
 #define BNO55_WRITE_ERROR -1
 
-#define I2C_WRITE_ERROR -2;
-#define I2C_READ_ERROR -3;
+#define I2C_WRITE_ERROR -2
+#define I2C_READ_ERROR -3
+#define READ_SENSOR_DATA_ERROR -4
+#define WRITE_SENSOR_DATA_ERROR -5
 // Modes
 #define OP_MODE_CONFIG          0x00
 #define OP_MODE_NDOF            0x0C // The both imu and accel
 #define PWR_MODE_NORMAL         0x00
 
-typedef struct {
-    uint16_t imusData[12];
-}SensorData;
+
+
 
 int readSensorData(SensorData* imu);
 int writeToIMU(uint8_t reg, uint8_t data);

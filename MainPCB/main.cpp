@@ -6,6 +6,11 @@
 #include "hardware/i2c.h"
 #include <stdio.h>
 
+typedef struct {
+    uint16_t imusData[12];
+}SensorData;
+
+
 int main()
 {
     stdio_init_all();
@@ -36,18 +41,21 @@ int main()
 
     SensorData imu;
     //printing out the data from imus
-    while(readSensorData(&imu) >=  0) {
+    while(readSensorData(&imu) ==  0) {
         std::cout << "Acceleration X Y Z: " 
         << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
+        sleep_ms(100);
         std::cout << "Magnytometer X Y Z: " 
         << imu.imusData[3] << " " << imu.imusData[4] << " " << imu.imusData[5] << " \n";
+        sleep_ms(100);
         std::cout << "Gyroscope: X Y Z: " 
         << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
+
         std::cout << "Orientation: X Y Z: " 
         << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
 
         sleep_ms(500);
     }
-    printf("",readSensorData(&imu));
+    // printf("",readSensorData(&imu));
     return 0;
 }
