@@ -26,11 +26,10 @@ bool configureIMU() {
 
     //reset all status bits
     i2c_write_blocking(I2C_PORT, I2C_ADDR, (uint8_t[]){BNO055_SYS_TRIGGER_ADDR,0x20}, 2, false);
-    sleep_ms(700);
+    sleep_ms(700); //gotta give it some times to acknowledge or it NACKS(apparently)
 
     // Configure Power Mode
-    i2c_write_blocking(I2C_PORT, I2C_ADDR, 
-        (uint8_t[]){BNO055_PWR_MODE_ADDR,PWR_MODE_NORMAL}, 2, false);
+    i2c_write_blocking(I2C_PORT, I2C_ADDR, (uint8_t[]){BNO055_PWR_MODE_ADDR,PWR_MODE_NORMAL}, 2, false);
     sleep_ms(5);
 
     //initializing internal oscillator
@@ -60,10 +59,6 @@ bool configureIMU() {
 int readSensorData(SensorData* imu) {
     uint8_t data[24];
     uint8_t ACC_LSB = 0x08;
-
-    //forcing page 0 before reading
-    // uint8_t page[2] = {0x07, 0x00};
-    // i2c_write_blocking(I2C_PORT, I2C_ADDR, page, 2, false)
 
     if(i2c_write_blocking(I2C_PORT, I2C_ADDR, &ACC_LSB, 1, true) != 1)
         return WRITE_SENSOR_DATA_ERROR;

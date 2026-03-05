@@ -37,7 +37,7 @@ int main()
     SensorData imu;
     //printing out the data from imus
     while(true) {
-        printf("reading successful?: %d", readSensorData(&imu));
+        printf("\nreading successful?: %d", readSensorData(&imu));
         std::cout << "\nAcceleration X Y Z: " 
         << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
         std::cout << "Magnytometer X Y Z: " 
@@ -48,6 +48,5 @@ int main()
         << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
         sleep_ms(1000);
     }
-    // printf("",readSensorData(&imu));
     return 0;
 }
