@@ -14,7 +14,7 @@ int main()
     sleep_ms(10000); // give the serial monitor a sec to catch up
 
     // I2C Initialisation. Using it at 400Khz.
-    i2c_init(I2C_PORT, 400*10000);
+    i2c_init(I2C_PORT, 400*1000);
     
     // Gotta actually set the pins to I2C mode or nothing happens
     gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
@@ -23,7 +23,7 @@ int main()
     gpio_pull_up(I2C_SCL);
 
     printf("Booting IMU...\n");
-    sleep_ms(1000);
+    sleep_ms(100);
     if(!configureIMU()) {
         while(true){
             printf(" IMU Failed. Stuck loop.\n");
@@ -36,7 +36,8 @@ int main()
 
     SensorData imu;
     //printing out the data from imus
-    while(readSensorData(&imu) ==  0) {
+    while(true) {
+        readSensorData(&imu);
         std::cout << "Acceleration X Y Z: " 
         << imu.imusData[0] << " "  << imu.imusData[1] << " " << imu.imusData[2] << " \n";
         std::cout << "Magnytometer X Y Z: " 
@@ -45,7 +46,6 @@ int main()
         << imu.imusData[6] << " " << imu.imusData[7] << " " << imu.imusData[8] << " \n";
         std::cout << "Orientation: X Y Z: " 
         << imu.imusData[9] << " " << imu.imusData[10] << " " << imu.imusData[11] << " \n";
-
         sleep_ms(500);
     }
     // printf("",readSensorData(&imu));

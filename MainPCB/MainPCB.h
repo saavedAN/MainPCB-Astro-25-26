@@ -7,8 +7,8 @@
 
 // I2C defines
 #define I2C_PORT i2c0
-#define I2C_SDA 2
-#define I2C_SCL 3
+#define I2C_SDA 0
+#define I2C_SCL 1
 #define I2C_ADDR 0x28
 
 // Registers (gotta have these)

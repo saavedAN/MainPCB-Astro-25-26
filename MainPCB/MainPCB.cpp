@@ -13,12 +13,13 @@ bool configureIMU() {
     uint8_t buffer;
     sleep_ms(1000);
     int status = i2c_write_blocking(I2C_PORT,I2C_ADDR,&reg,1,true);
+    printf("check point1");
     status = i2c_read_blocking(I2C_PORT,I2C_ADDR,&buffer,1,false);
+    printf("check point2");
     if(buffer != BNO055_ID){
         printf("BNO055 dead or missing. ID: 0x%02X\n", buffer);
         return false;
     }
-
     //entering config mode
     i2c_write_blocking(I2C_PORT, I2C_ADDR, (uint8_t[]){BNO055_OPR_MODE_ADDR, OP_MODE_CONFIG}, 2, false);
     sleep_ms(20);
@@ -61,18 +62,21 @@ int readSensorData(SensorData* imu) {
 
     uint8_t ACC_LSB = 0x08;
     int status = i2c_write_blocking(I2C_PORT, I2C_ADDR, &ACC_LSB, 1, true);
+    printf(" cehck point3 ");
     if(status < 0){
         return WRITE_SENSOR_DATA_ERROR;//i2cwrite has issues
     }
     status = i2c_read_blocking(I2C_PORT, I2C_ADDR, data, 24, false);  // 0x08 is start of sensor data ACC_X_LSB
+    printf(" check point4 ");
     if(status < 0){
         return READ_SENSOR_DATA_ERROR;//i2cread has issues
     }    
-
+    printf(" check point5 ");
     // each sensor data is 16 bit, accel is first, mag 2nd, gyro 3rd, ori 4th. stored in imus below
     for(int i = 0; i < 12; i++) {
         imu->imusData[i] = (int16_t)(data[2*i+1] << 8 | data[2*i]);
     }
-    return 0;
+    printf(" check point6 ");
+    return 1;
 }
 
