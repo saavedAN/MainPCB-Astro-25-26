@@ -22,11 +22,11 @@ bool configureIMU() {
     }
     //entering config mode
     i2c_write_blocking(I2C_PORT, I2C_ADDR, (uint8_t[]){BNO055_OPR_MODE_ADDR, OP_MODE_CONFIG}, 2, false);
-    sleep_ms(20);
+    sleep_ms(50);
 
     //reset all status bits
     i2c_write_blocking(I2C_PORT, I2C_ADDR, (uint8_t[]){BNO055_SYS_TRIGGER_ADDR,0x20}, 2, false);
-    sleep_ms(5);
+    sleep_ms(700);
 
     // Configure Power Mode
     i2c_write_blocking(I2C_PORT, I2C_ADDR, 
@@ -51,7 +51,7 @@ bool configureIMU() {
     //configuring operation mode
     i2c_write_blocking(I2C_PORT, I2C_ADDR,
         (uint8_t[]){BNO055_OPR_MODE_ADDR,OP_MODE_NDOF},2,false);
-    sleep_ms(20);
+    sleep_ms(50);
     
     printf("Yippeee!!!");
     return true; // we good
@@ -59,24 +59,21 @@ bool configureIMU() {
 
 int readSensorData(SensorData* imu) {
     uint8_t data[24];
-
     uint8_t ACC_LSB = 0x08;
-    int status = i2c_write_blocking(I2C_PORT, I2C_ADDR, &ACC_LSB, 1, true);
-    printf(" cehck point3 ");
-    if(status < 0){
-        return WRITE_SENSOR_DATA_ERROR;//i2cwrite has issues
-    }
-    status = i2c_read_blocking(I2C_PORT, I2C_ADDR, data, 24, false);  // 0x08 is start of sensor data ACC_X_LSB
-    printf(" check point4 ");
-    if(status < 0){
-        return READ_SENSOR_DATA_ERROR;//i2cread has issues
-    }    
-    printf(" check point5 ");
-    // each sensor data is 16 bit, accel is first, mag 2nd, gyro 3rd, ori 4th. stored in imus below
-    for(int i = 0; i < 12; i++) {
-        imu->imusData[i] = (int16_t)(data[2*i+1] << 8 | data[2*i]);
-    }
-    printf(" check point6 ");
+
+    //forcing page 0 before reading
+    // uint8_t page[2] = {0x07, 0x00};
+    // i2c_write_blocking(I2C_PORT, I2C_ADDR, page, 2, false)
+
+    if(i2c_write_blocking(I2C_PORT, I2C_ADDR, &ACC_LSB, 1, true) != 1)
+        return WRITE_SENSOR_DATA_ERROR;
+
+    if(i2c_read_blocking(I2C_PORT, I2C_ADDR, data, 24, false) != 24)
+        return READ_SENSOR_DATA_ERROR;
+
+    for(int i = 0; i < 12; i++)
+        imu->imusData[i] = (int16_t)((data[2*i+1] << 8) | data[2*i]);
+
     return 1;
 }
 
